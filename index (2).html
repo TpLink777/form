@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulario de Registro Premium</title>
+  <style>
+    :root {
+      --primary: #2ea44f;
+      --primary-dark: #22863a;
+      --secondary: #0366d6;
+      --dark: #24292e;
+      --light: #f6f8fa;
+      --gray: #586069;
+      --error: #cb2431;
+      --success: #28a745;
+      --border-radius: 12px;
+      --box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      --transition: all 0.3s ease-in-out;
+      --gradient-1: linear-gradient(135deg, #6e8efb, #a777e3);
+      --gradient-2: linear-gradient(135deg, #2ea44f, #4dc7a0);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-color: #0d1117;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(138, 43, 226, 0.3) 0%, transparent 30%),
+        radial-gradient(circle at 85% 85%, rgba(46, 164, 79, 0.3) 0%, transparent 30%),
+        radial-gradient(circle at 50% 50%, rgba(30, 111, 217, 0.2) 0%, transparent 40%);
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background-color: white;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .floating-emoji {
+      position: absolute;
+      animation: float 6s ease-in-out infinite;
+      opacity: 0.8;
+      font-size: 24px;
+      z-index: 2;
+    }
+
+    .emoji-1 { top: 20px; left: -15px; animation-delay: 0s; }
+    .emoji-2 { top: 60px; right: -15px; animation-delay: 1s; }
+    .emoji-3 { bottom: 50px; left: -15px; animation-delay: 2s; }
+    .emoji-4 { bottom: 20px; right: -15px; animation-delay: 3s; }
+
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(5deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+
+    .form-header {
+      background: var(--gradient-1);
+      padding: 30px;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header-shape {
+      position: absolute;
+      bottom: -40px;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      background-color: white;
+      border-radius: 50% 50% 0 0;
+      z-index: 1;
+    }
+
+    .github-icon {
+      width: 70px;
+      height: 70px;
+      margin-bottom: 15px;
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+      animation: pulse 3s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .form-title {
+      font-size: 28px;
+      margin-bottom: 8px;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .form-subtitle {
+      font-size: 16px;
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: normal;
+    }
+
+    .form-body {
+      padding: 30px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .input-group {
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+    }
+
+    .label-emoji {
+      margin-right: 8px;
+      font-size: 18px;
+    }
+
+    .input-group input, 
+    .input-group select {
+      width: 100%;
+      padding: 14px;
+      border: 2px solid #e1e4e8;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: var(--transition);
+      background-color: #f8fafc;
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+      outline: none;
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 4px rgba(3, 102, 214, 0.2);
+      background-color: white;
+    }
+
+    .password-container {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 14px;
+      top: 14px;
+      cursor: pointer;
+      color: var(--gray);
+      background: none;
+      border: none;
+      font-size: 18px;
+      transition: var(--transition);
+    }
+
+    .toggle-password:hover {
+      transform: scale(1.1);
+    }
+
+    .strength-meter {
+      height: 6px;
+      width: 100%;
+      background-color: #e1e4e8;
+      border-radius: 3px;
+      margin-top: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .strength-meter::before {
+      content: '';
+      height: 100%;
+      border-radius: 3px;
+      background-color: var(--error);
+      width: 0%;
+      position: absolute;
+      transition: var(--transition);
+    }
+
+    .strength-text {
+      font-size: 12px;
+      margin-top: 10px;
+      color: var(--gray);
+      display: flex;
+      align-items: center;
+    }
+
+    .strength-emoji {
+      margin-right: 6px;
+      font-size: 16px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 22px;
+      position: relative;
+    }
+
+    .checkbox-group input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .checkbox-group .checkmark {
+      height: 22px;
+      width: 22px;
+      background-color: #f8fafc;
+      border: 2px solid #e1e4e8;
+      border-radius: 6px;
+      margin-right: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .checkbox-group input:checked ~ .checkmark {
+      background-color: var(--secondary);
+      border-color: var(--secondary);
+    }
+
+    .checkbox-group .checkmark:after {
+      content: "✓";
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      display: none;
+    }
+
+    .checkbox-group input:checked ~ .checkmark:after {
+      display: block;
+    }
+
+    .checkbox-group label {
+      font-size: 14px;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    .checkbox-group a {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+    }
+
+    .checkbox-group a::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      bottom: -2px;
+      left: 0;
+      background-color: var(--secondary);
+      transform: scaleX(0);
+      transition: var(--transition);
+      transform-origin: bottom right;
+    }
+
+    .checkbox-group a:hover::after {
+      transform: scaleX(1);
+      transform-origin: bottom left;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--gradient-2);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(46, 164, 79, 0.3);
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: 0.5s;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 15px rgba(46, 164, 79, 0.4);
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn:active {
+      transform: translateY(-1px);
+    }
+
+    .btn:disabled {
+      background: linear-gradient(135deg, #94d3a2, #a4e0c5);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn:disabled::before {
+      display: none;
+    }
+
+    .btn-text {
+      margin-left: 8px;
+    }
+
+    .form-footer {
+      text-align: center;
+      padding: 24px;
+      background-color: var(--light);
+      border-top: 1px solid #e1e4e8;
+      position: relative;
+    }
+
+    .form-footer::before {
+      content: '';
+      height: 3px;
+      width: 100%;
+      position: absolute;
+      top: -3px;
+      left: 0;
+      background: var(--gradient-1);
+    }
+
+    .form-footer a {
+      color: var(--secondary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    .form-footer a:hover {
+      color: #0550ae;
+    }
+
+    .error-message {
+      color: var(--error);
+      font-size: 12px;
+      margin-top: 8px;
+      display: none;
+      display: flex;
+      align-items: center;
+    }
+
+    .error-emoji {
+      margin-right: 6px;
+    }
+
+    .input-error {
+      border-color: var(--error) !important;
+    }
+
+    /* Animaciones */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .container {
+      animation: fadeIn 0.7s ease-out;
+    }
+
+    .social-buttons {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .social-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      border-radius: 10px;
+      border: 2px solid #e1e4e8;
+      background-color: white;
+      cursor: pointer;
+      transition: var(--transition);
+      color: var(--dark);
+      font-weight: 500;
+    }
+
+    .social-btn:hover {
+      background-color: var(--light);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .social-btn:active {
+      transform: translateY(-1px);
+    }
+
+    .social-btn img {
+      width: 24px;
+      height: 24px;
+      margin-right: 8px;
+    }
+
+    .social-divider {
+      display: flex;
+      align-items: center;
+      margin: 25px 0;
+      color: var(--gray);
+    }
+
+    .social-divider::before,
+    .social-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background-color: #e1e4e8;
+    }
+
+    .social-divider span {
+      padding: 0 10px;
+      font-size: 14px;
+    }
+
+    /* Loader */
+    .loader {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 10px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Confetti animation for success */
+    .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #ffd700;
+      opacity: 0;
+    }
+
+    @keyframes confetti-fall {
+      0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .container {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Floating emojis around the form -->
+    <div class="floating-emoji emoji-1">✨</div>
+    <div class="floating-emoji emoji-2">🚀</div>
+    <div class="floating-emoji emoji-3">💫</div>
+    <div class="floating-emoji emoji-4">🌟</div>
+    
+    <div class="form-header">
+      <svg class="github-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="white">
+        <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+      </svg>
+      <h1 class="form-title">✨ Crea tu cuenta ✨</h1>
+      <p class="form-subtitle">🚀 Únete a la comunidad de desarrolladores</p>
+      <div class="header-shape"></div>
+    </div>
+    
+    <div class="form-body">
+      <div class="social-buttons">
+        <button class="social-btn">
+          <img src="/api/placeholder/24/24" alt="Google logo">
+          Google
+        </button>
+        <button class="social-btn">
+          <img src="/api/placeholder/24/24" alt="GitHub logo">
+          GitHub
+        </button>
+      </div>
+      
+      <div class="social-divider">
+        <span>O regístrate con email</span>
+      </div>
+      
+      <div class="input-group">
+        <label for="username"><span class="label-emoji">👤</span> Nombre de usuario</label>
+        <input type="text" id="username" placeholder="johndoe" autocomplete="username">
+        <div class="error-message"><span class="error-emoji">❌</span> El nombre de usuario es requerido</div>
+      </div>
+      
+      <div class="input-group">
+        <label for="email"><span class="label-emoji">📧</span> Correo electrónico</label>
+        <input type="email" id="email" placeholder="john@ejemplo.com" autocomplete="email">
+        <div class="error-message"><span class="error-emoji">❌</span> Ingresa un correo electrónico válido</div>
+      </div>
+      
+      <div class="input-group">
+        <label for="password"><span class="label-emoji">🔒</span> Contraseña</label>
+        <div class="password-container">
+          <input type="password" id="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+          <button type="button" class="toggle-password">👁️</button>
+        </div>
+        <div class="strength-meter"></div>
+        <div class="strength-text"><span class="strength-emoji">🔑</span> Fuerza de la contraseña: Débil</div>
+        <div class="error-message"><span class="error-emoji">❌</span> La contraseña debe tener al menos 8 caracteres</div>
+      </div>
+      
+      <div class="input-group">
+        <label for="role"><span class="label-emoji">💼</span> ¿Cuál es tu rol?</label>
+        <select id="role">
+          <option value="" disabled selected>Selecciona una opción</option>
+          <option value="developer">👨‍💻 Desarrollador</option>
+          <option value="designer">🎨 Diseñador</option>
+          <option value="manager">📊 Project Manager</option>
+          <option value="student">🎓 Estudiante</option>
+          <option value="other">🔍 Otro</option>
+        </select>
+      </div>
+      
+      <div class="checkbox-group">
+        <input type="checkbox" id="terms">
+        <span class="checkmark"></span>
+        <label for="terms">Acepto los <a href="#">Términos de servicio</a> y la <a href="#">Política de privacidad</a></label>
+      </div>
+      
+      <div class="checkbox-group">
+        <input type="checkbox" id="newsletter">
+        <span class="checkmark"></span>
+        <label for="newsletter">Me gustaría recibir actualizaciones sobre nuevas características y eventos 📬</label>
+      </div>
+      
+      <button type="submit" class="btn" id="submit-btn" disabled>
+        <span>🚀</span>
+        <span class="btn-text">Crear cuenta</span>
+        <span class="loader"></span>
+      </button>
+    </div>
+    
+    <div class="form-footer">
+      ¿Ya tienes una cuenta? <a href="#">✨ Inicia sesión ✨</a>
+    </div>
+  </div>
+
+  <script>
+    // Validación del formulario
+    const usernameInput = document.getElementById('username');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const termsCheckbox = document.getElementById('terms');
+    const submitBtn = document.getElementById('submit-btn');
+    const togglePassword = document.querySelector('.toggle-password');
+    const strengthMeter = document.querySelector('.strength-meter');
+    const strengthText = document.querySelector('.strength-text');
+    
+    // Función para validar correo electrónico
+    function validateEmail(email) {
+      const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    }
+    
+    // Función para medir la fortaleza de la contraseña
+    function measurePasswordStrength(password) {
+      let strength = 0;
+      
+      if (password.length >= 8) strength += 1;
+      if (password.match(/[a-z]+/)) strength += 1;
+      if (password.match(/[A-Z]+/)) strength += 1;
+      if (password.match(/[0-9]+/)) strength += 1;
+      if (password.match(/[^a-zA-Z0-9]+/)) strength += 1;
+      
+      return strength;
+    }
+    
+    // Actualizar la fortaleza de la contraseña visualmente
+    function updatePasswordStrength() {
+      const password = passwordInput.value;
+      const strength = measurePasswordStrength(password);
+      
+      if (password.length === 0) {
+        strengthMeter.style.setProperty('--before-width', '0%');
+        strengthText.innerHTML = '<span class="strength-emoji">🔑</span> Fuerza de la contraseña: ';
+        return;
+      }
+      
+      let strengthLabel = '';
+      let strengthColor = '';
+      let strengthWidth = '';
+      let strengthEmoji = '🔑';
+      
+      switch (strength) {
+        case 1:
+          strengthLabel = 'Débil';
+          strengthColor = '#cb2431';
+          strengthWidth = '20%';
+          strengthEmoji = '😰';
+          break;
+        case 2:
+          strengthLabel = 'Regular';
+          strengthColor = '#f66a0a';
+          strengthWidth = '40%';
+          strengthEmoji = '😐';
+          break;
+        case 3:
+          strengthLabel = 'Buena';
+          strengthColor = '#f9c513';
+          strengthWidth = '60%';
+          strengthEmoji = '🙂';
+          break;
+        case 4:
+          strengthLabel = 'Fuerte';
+          strengthColor = '#2ea44f';
+          strengthWidth = '80%';
+          strengthEmoji = '😃';
+          break;
+        case 5:
+          strengthLabel = 'Excelente';
+          strengthColor = '#28a745';
+          strengthWidth = '100%';
+          strengthEmoji = '🔒';
+          break;
+      }
+      
+      strengthText.innerHTML = `<span class="strength-emoji">${strengthEmoji}</span> Fuerza de la contraseña: ${strengthLabel}`;
+      strengthMeter.style.setProperty('--before-width', strengthWidth);
+      document.querySelector('.strength-meter::before').style.width = strengthWidth;
+      document.querySelector('.strength-meter::before').style.backgroundColor = strengthColor;
+    }
+    
+    // Mostrar/ocultar contraseña
+    togglePassword.addEventListener('click', function() {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      this.textContent = type === 'password' ? '👁️' : '🔒';
+    });
+    
+    // Eventos de validación
+    passwordInput.addEventListener('input', function() {
+      const password = this.value;
+      const errorMessage = this.parentElement.nextElementSibling.nextElementSibling.nextElementSibling;
+      
+      if (password.length < 8 && password.length > 0) {
+        errorMessage.style.display = 'flex';
+        this.classList.add('input-error');
+      } else {
+        errorMessage.style.display = 'none';
+        this.classList.remove('input-error');
+      }
+      
+      updatePasswordStrength();
+      validateForm();
+    });
+    
+    usernameInput.addEventListener('input', function() {
+      const username = this.value;
+      const errorMessage = this.nextElementSibling;
+      
+      if (username.trim() === '') {
+        errorMessage.style.display = 'flex';
+        this.classList.add('input-error');
+      } else {
+        errorMessage.style.display = 'none';
+        this.classList.remove('input-error');
+      }
+      
+      validateForm();
+    });
+    
+    emailInput.addEventListener('input', function() {
+      const email = this.value;
+      const errorMessage = this.nextElementSibling;
+      
+      if (!validateEmail(email) && email.trim() !== '') {
+        errorMessage.style.display = 'flex';
+        this.classList.add('input-error');
+      } else {
+        errorMessage.style.display = 'none';
+        this.classList.remove('input-error');
+      }
+      
+      validateForm();
+    });
+    
+    termsCheckbox.addEventListener('change', validateForm);
+    
+    // Validar el formulario completo
+    function validateForm() {
+      const username = usernameInput.value.trim();
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const termsAccepted = termsCheckbox.checked;
+      
+      const isValid = 
+        username !== '' && 
+        validateEmail(email) && 
+        password.length >= 8 && 
+        termsAccepted;
+      
+      submitBtn.disabled = !isValid;
+    }
+    
+    // Crear y animar confeti
+    function createConfetti() {
+      const confettiCount = 100;
+      const container = document.querySelector('.container');
+      
+      for (let i = 0; i < confettiCount; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        
+        // Colores aleatorios
+        const colors = ['#ffd700', '#ff5252', '#2196f3', '#4caf50', '#e91e63', '#ff9800'];
+        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        
+        // Posición inicial aleatoria
+        confetti.style.left = Math.random() * 100 + '%';
+        
+        // Tamaño aleatorio
+        const size = Math.random() * 10 + 5;
+        confetti.style.width = size + 'px';
+        confetti.style.height = size + 'px';
+        
+        // Forma aleatoria
+        const shapes = ['square', 'circle'];
+        const shape = shapes[Math.floor(Math.random() * shapes.length)];
+        confetti.style.borderRadius = shape === 'circle' ? '50%' : '0';
+        
+        // Animación
+        confetti.style.animation = `confetti-fall ${Math.random() * 3 + 2}s ease-in-out forwards`;
+        confetti.style.animationDelay = Math.random() * 2 + 's';
+        
+        container.appendChild(confetti);
+        
+        // Eliminar después de la animación
+        setTimeout(() => {
+          confetti.remove();
+        }, 5000);
+      }
+    }
+    
+    // Simulación de envío del formulario
+    submitBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      const loader = this.querySelector('.loader');
+      const btnText = this.querySelector('.btn-text');
+      const btnEmoji = this.querySelector('span:first-child');
+      const originalText = btnText.textContent;
+      const originalEmoji = btnEmoji.textContent;
+      
+      this.disabled = true;
+      loader.style.display = 'inline-block';
+      btnText.textContent = 'Procesando';
+      btnEmoji.textContent = '⏳';
+      
+      // Simular envío de datos
+      setTimeout(() => {
+        loader.style.display = 'none';
+        btnText.textContent = '¡Cuenta creada con éxito!';
+        btnEmoji.textContent = '🎉';
+        this.style.background = 'linear-gradient(135deg, #28a745, #43d97e)';
+        
+        // Lanzar confeti
+        createConfetti();
+        
+        // Redirección simulada
+        setTimeout(() => {
+          alert('🎉 ¡Formulario enviado con éxito! En una aplicación real, serías redirigido.');
+          // Restaurar el botón
+          btnText.textContent = originalText;
+          btnEmoji.textContent = originalEmoji;
+          this.disabled = false;
+          this.style.background = '';
+        }, 3000);
+      }, 1500);
+    });
+    
+    // Inicializar
+    validateForm();
+  </script>
+</body>
+</html>
